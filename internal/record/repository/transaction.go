@@ -73,7 +73,7 @@ func (s *TransactionRepository) SelectLastTenOddTransactions() ([]postgres.Trans
 		LIMIT 10
 	`,
 	); err != nil {
-		return nil, errors.New(err.Error() + "getting card metadata profiles by product ID failed")
+		return nil, err
 	}
 
 	return transactions, nil

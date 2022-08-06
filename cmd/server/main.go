@@ -31,17 +31,21 @@ func main() {
 	transactionRepository := repository.NewTransactionRepository(db)
 	userRepository := repository.NewUserRepository(db)
 	processRecordService := service.NewProcessRecordService(transactionRepository, userRepository, db)
-	recordHandler := internalHttp.NewProcessRecordHandler(processRecordService, validate)
+	userService := service.NewUserService(userRepository)
+	recordHandler := internalHttp.NewProcessRecordHandler(processRecordService, userService, validate)
 
 	stm := middleware.SourceType{}
 	stm.Populate([]string{"game", "server", "payment"})
 
 	r := mux.NewRouter()
-	r.HandleFunc("/process-record", recordHandler.ProcessRecord).Methods("POST").
-		Headers("Content-Type", "application/json")
 
-	r.Use(stm.Middleware)
-	r.MethodNotAllowedHandler = middleware.MethodNotAllowedHandler()
+	postR := r.Methods(http.MethodPost).Subrouter()
+	postR.HandleFunc("/process-record", recordHandler.ProcessRecord)
+	postR.Use(stm.Middleware)
+	postR.MethodNotAllowedHandler = middleware.MethodNotAllowedHandler()
+
+	getR := r.Methods(http.MethodGet).Subrouter()
+	getR.HandleFunc("/get-users", recordHandler.GetUsers)
 
 	server := &http.Server{
 		Addr:         ":8080",

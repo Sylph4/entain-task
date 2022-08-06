@@ -12,14 +12,14 @@ import (
 
 type ProcessRecordHandler struct {
 	processRecordService service.IProcessRecordService
+	userService          *service.UserService
 	validate             *validator.Validate
 }
 
-func NewProcessRecordHandler(
-	processRecordService service.IProcessRecordService,
-	validate *validator.Validate) *ProcessRecordHandler {
+func NewProcessRecordHandler(processRecordService service.IProcessRecordService, userService *service.UserService, validate *validator.Validate) *ProcessRecordHandler {
 	return &ProcessRecordHandler{
 		processRecordService: processRecordService,
+		userService:          userService,
 		validate:             validate,
 	}
 }
@@ -50,4 +50,21 @@ func (h *ProcessRecordHandler) ProcessRecord(w http.ResponseWriter, r *http.Requ
 	}
 
 	http.StatusText(200)
+}
+
+func (h *ProcessRecordHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.userService.GetAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	response, err := json.Marshal(users)
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+
+		return
+	}
+
+	//nolint
+	w.Write(response)
 }

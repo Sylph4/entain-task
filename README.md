@@ -15,6 +15,10 @@ Request body example
 
 "user_id" in example is default one. Odd records are processed every 1 minute
 
+GET <endpoint_url>/get-users
+
+Return users with balance for testing
+
 ## Migrations
 
 Applied automatically on app run

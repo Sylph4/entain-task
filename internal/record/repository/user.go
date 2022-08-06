@@ -12,6 +12,7 @@ import (
 type IUserRepository interface {
 	Update(user *postgres.User) error
 	SelectUserByID(id strfmt.UUID4) (*postgres.User, error)
+	SelectAllUsers() ([]postgres.User, error)
 }
 
 type UserRepository struct {
@@ -52,4 +53,19 @@ func (s *UserRepository) Update(tx *gorp.Transaction, user postgres.User) error 
 	}
 
 	return nil
+}
+
+func (s *UserRepository) SelectAllUsers() ([]postgres.User, error) {
+	var users []postgres.User
+	if _, err := s.db.Select(&users, `
+		SELECT
+			*
+		FROM
+			users		
+	`,
+	); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
