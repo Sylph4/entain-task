@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
-	"github.com/go-playground/validator/v10"
-	"github.com/sylph4/entain-task/internal/record/model"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	internalHttp "github.com/sylph4/entain-task/internal/record/http"
 	"github.com/sylph4/entain-task/internal/record/middleware"
+	"github.com/sylph4/entain-task/internal/record/model"
 	"github.com/sylph4/entain-task/internal/record/repository"
 	"github.com/sylph4/entain-task/internal/record/service"
 	"github.com/sylph4/entain-task/storage"
