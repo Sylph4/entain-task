@@ -35,5 +35,5 @@ DB_NAME=
 
 Run docker container with arg ‘--env-file ./<filename>.list’
 
-## How to run locally without 
+## How to run locally without docker
 Run entain-task/cmd/server/main.go with os env db variables, as above
